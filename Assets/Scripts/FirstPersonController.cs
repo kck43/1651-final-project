@@ -77,7 +77,9 @@ namespace StarterAssets
 
 		private void OnTriggerEnter(Collider other){
 			//Debug.Log("Move!");
-			spawnManager.SpawnTrigger();
+			if(other.gameObject.tag == "Respawn"){
+				spawnManager.SpawnTrigger();
+			}
 		}
 
 		private bool IsCurrentDeviceMouse
