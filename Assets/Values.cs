@@ -7,7 +7,19 @@ public class Values : MonoBehaviour
     int schedule_chosen;
 
     public void init(float val, int sch){
+        Debug.Log("init");
+        Debug.Log(val);
+        Debug.Log(sch);
+
         jitter_value = val;
         schedule_chosen = sch;
+    }
+
+    public float getJitter(){
+        return jitter_value;
+    }
+
+    public int getSchedule(){
+        return schedule_chosen;
     }
 }

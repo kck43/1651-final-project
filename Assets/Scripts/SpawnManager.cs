@@ -19,6 +19,5 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnTrigger(){
         roadSpawner.MoveRoad();
-        Debug.Log("Move!");
     }
 }
