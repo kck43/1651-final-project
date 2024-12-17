@@ -4,7 +4,7 @@ public class SightManager : MonoBehaviour
 {
     public GameObject blind;
     public GameObject vals;
-    int schedule_chosen;
+    int[] schedule_chosen;
     float jitter_value;
     float timer;
     float period;
@@ -41,22 +41,23 @@ public class SightManager : MonoBehaviour
     // Update is called once per frame
 
 
-void Update () {
-    timer += Time.deltaTime;
-    Debug.Log("time " + timer + "Atime " + nextActionTime + " jv " + jitter_value, this);
+    void Update () 
+    {
+        timer += Time.deltaTime;
+        Debug.Log("time " + timer + "Atime " + nextActionTime + " jv " + jitter_value, this);
 
-    //Debug.Log("tim" + timer);
-    if (timer >= nextActionTime) {
-        float jitter = Random.Range(0, jitter_value);
-       nextActionTime = nextActionTime + period + jitter;
-       Debug.Log("j" + jitter, this);
-       if(blind.activeSelf){
-            blind.SetActive(false);
-       }
-       else{
-            blind.SetActive(true);
-       }
+        //Debug.Log("tim" + timer);
+        if (timer >= nextActionTime) {
+            float jitter = Random.Range(0, jitter_value);
+           nextActionTime = nextActionTime + period + jitter;
+           Debug.Log("j" + jitter, this);
+           if(blind.activeSelf){
+                blind.SetActive(false);
+           }
+           else{
+                blind.SetActive(true);
+           }
+        }
+
     }
-
-}
 }
