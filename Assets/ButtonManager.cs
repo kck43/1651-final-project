@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class ButtonManager : MonoBehaviour
 {
     static int schedule_chosen;
+    static int algorithm;
     static float jitter_value;
     //public Slider slider;
     //Scenemanager scenemanager;
@@ -12,6 +13,7 @@ public class ButtonManager : MonoBehaviour
     void Start()
     {
         schedule_chosen = 0; //no mode chosen
+        algorithm = -1;
         jitter_value = 0;
     }
 
@@ -24,7 +26,7 @@ public class ButtonManager : MonoBehaviour
     public void ChangeScene()
     {
         //Values vals = GameObject.Find("Values");
-        vals.init(jitter_value, schedule_chosen);
+        vals.init(jitter_value, schedule_chosen, algorithm);
         DontDestroyOnLoad(vals);
         SceneManager.LoadScene("Level");
     }
@@ -46,7 +48,7 @@ public class ButtonManager : MonoBehaviour
             GameObject DMbutton = GameObject.Find("DM");
             DMbutton.GetComponent<Image>().color = new Color(255,255,255);
         }
-        schedule_chosen = 1;
+        algorithm = 0;
         
     }
 
@@ -65,7 +67,7 @@ public class ButtonManager : MonoBehaviour
             GameObject DMbutton = GameObject.Find("DM");
             DMbutton.GetComponent<Image>().color = new Color(255,255,255);
         }
-        schedule_chosen = 2;
+        algorithm = 1;
     }
 
     public void SelectDM(){ //3
