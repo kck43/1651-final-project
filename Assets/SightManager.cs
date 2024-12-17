@@ -14,7 +14,7 @@ public class SightManager : MonoBehaviour
     void Start()
     {
         timer = 0f;
-        period = 1.0f;
+        period = 2.0f;
         nextActionTime = 0;
 
         blind = GameObject.Find("Blind");
@@ -31,7 +31,7 @@ public class SightManager : MonoBehaviour
             jitter_value += 1;
         }
         else{
-            jitter_value = 100/jitter_value;
+           // jitter_value = 100/jitter_value;
 
         }
         
@@ -43,12 +43,13 @@ public class SightManager : MonoBehaviour
 
 void Update () {
     timer += Time.deltaTime;
-    Debug.Log("time " + timer + "Atime " + nextActionTime, this);
+    Debug.Log("time " + timer + "Atime " + nextActionTime + " jv " + jitter_value, this);
 
     //Debug.Log("tim" + timer);
     if (timer >= nextActionTime) {
         float jitter = Random.Range(0, jitter_value);
        nextActionTime = nextActionTime + period + jitter;
+       Debug.Log("j" + jitter, this);
        if(blind.activeSelf){
             blind.SetActive(false);
        }

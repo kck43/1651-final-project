@@ -7,13 +7,15 @@ public class TrafficController : MonoBehaviour
     GameObject red;
     GameObject yellow;
     GameObject green;
-    //public GameObject GameOver;
 
+    public GameObject over;
+    public GameObject blind;
+    
+    public SightManager sight;
     int color;
     void Start()
     {
-        //GameOver = GameObject.Find("GameOver");
-        //GameOver.SetActive(false);
+
 
         red = GameObject.Find("Red");
         red.SetActive(false);
@@ -25,6 +27,10 @@ public class TrafficController : MonoBehaviour
         green.SetActive(false);
 
         color = 0;
+
+
+        //over = GameObject.Find("GameOver");
+        over.SetActive(false);
 
     }
 
@@ -72,8 +78,9 @@ public class TrafficController : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if(color == 2){
-            //blind.SetActive(false);
-            //GameOver.SetActive(true);
+            blind.SetActive(false);
+            sight.enabled = false;
+            over.SetActive(true);
             Debug.Log("Went through a red light!");
         }
     }
