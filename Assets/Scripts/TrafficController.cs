@@ -18,7 +18,7 @@ public class TrafficController : MonoBehaviour
         yellow.SetActive(false);
 
         green = GameObject.Find("Green");
-        green.SetActive(true);
+        green.SetActive(false);
 
         color = 0;
 
@@ -27,35 +27,47 @@ public class TrafficController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(color);
         targetTime -= Time.deltaTime;
+        if  (targetTime>7.0f){
+            green.SetActive(true);
+        }
 
         if (targetTime <=7.0f && color == 0){
+            Debug.Log("green go away");
             green.SetActive(false);
             yellow.SetActive(true);
             color = 1;
         }
 
-        else if (targetTime <=5 && color == 1){
+        else if (targetTime <=5.0f && color == 1){
             yellow.SetActive(false);
             red.SetActive(true);
+            color = 2;
+        }
+
+        else if (targetTime <= 0 && color == 2){
+            red.SetActive(false);
+            yellow.SetActive(false);
+            green.SetActive(true);
+            color = 0;
+            targetTime = 10.0f;        
         }
         else{
 
         }
+        
     }
 
 
     void Reset(){
-        red.SetActive(false);
-        yellow.SetActive(false);
-        green.SetActive(true);
-        color = 0;
+
     }
 
 
     void OnTriggerEnter(Collider other)
     {
-        if(color == 1){
+        if(color == 2){
             Debug.Log("Went through a red light!");
         }
     }

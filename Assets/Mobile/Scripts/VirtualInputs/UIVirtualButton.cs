@@ -25,6 +25,7 @@ public class UIVirtualButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log("DM?!!!!");
         OutputButtonClickEvent();
     }
 
