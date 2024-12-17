@@ -110,4 +110,15 @@ public class ScheduleManager : MonoBehaviour
         TaskSet2[6] = new Task(6, 1, 120, 50);
         TaskSet2[7] = new Task(7, 2, 175, 60);
     }
+
+    public int[] GetSchedule(int schednum, int algo)
+    {
+        // Schednum 1-2
+        // Algo 0-1 (EDF-RM)
+        if (schednum == 1 && algo == 0) return Schedule1_EDF;
+        else if (schednum == 1 && algo == 1) return Schedule1_RMS;
+        else if (schednum == 2 && algo == 0) return Schedule2_EDF;
+        else if (schednum == 2 && algo == 1) return Schedule2_RMS;
+        else return null;
+    }    
 }
