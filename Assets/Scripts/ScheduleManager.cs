@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Timers;
 using System;
+using System.Threading.Tasks;
 
 public class ScheduleManager : MonoBehaviour
 {
@@ -47,6 +48,7 @@ public class ScheduleManager : MonoBehaviour
                                          1,1,1,-1,-1,-1,-1,-1,-1,-1,2,2,2,2,-1,5,5,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
                                          1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5,0,0,0,0,0,0,0,0,
                                          1,1,1,0,3,3,-1,-1,-1,-1,2,2,2,2,-1,-1,-1,-1,-1,-1,-1};
+    private int[] Sched;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -55,37 +57,33 @@ public class ScheduleManager : MonoBehaviour
         // Init variables
         SimulationTime = 0;
         Generator = new System.Random();
-        int[] Sched = Schedule1_EDF;
-
-        // Start the simulation 
-        while (SimulationTime < 220)
-        {
-
-            if (Sched[SimulationTime] == 0)
-            {
-                // Sight task is running
-            }
-            else
-            {
-                // No sight task (black out the screen?)
-
-
-                // If sight task runs next, add jitter
-                if (SimulationTime + 1 < Sched.Length && Sched[SimulationTime + 1] == 0)
-                {       
-
-                }
-            }
-
-            // Add delay (applied to every task to simulate a time quantum)
-            // Base delay of 500ms
-        }
+        Sched = Schedule1_EDF;
     }
 
     // Update is called once per frame
-    void Update()
+    async void Update()
     {
-        
+        if (Sched[SimulationTime] == 0)
+        {
+            // Sight task is running
+        }
+        else
+        {
+            // Other task is running
+
+            // If the sight task runs next, add jitter
+            if (SimulationTime + 1 < Sched.Length && Sched[SimulationTime + 1] == 0)
+            {
+                JitterDelay = Generator.Next(JitterBound);
+                await System.Threading.Tasks.Task.Delay(JitterDelay);
+            }
+        }
+
+        // Add delay (applied to every task to simulate a time quantum)
+        // Base delay of 500ms
+        await System.Threading.Tasks.Task.Delay(SimulationDelay);
+
+        SimulationTime++;
     }
 
     // Initialize the task set where the sight task has 25% utilization (schedulable by both RM and EDF)
