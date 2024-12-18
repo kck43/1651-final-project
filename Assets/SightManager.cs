@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SightManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class SightManager : MonoBehaviour
     float period;
     float nextActionTime;
     int GameOver;
+    RawImage ScreenshotOverlay;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,6 +28,9 @@ public class SightManager : MonoBehaviour
         schedule_chosen = vals.getSchedule();
         
         jitter_value = vals.getJitter();
+
+        GameObject scoverlay = GameObject.Find("Screenshot");
+        ScreenshotOverlay = scoverlay.GetComponent<RawImage>();
 
         if (jitter_value == 0 ){
             jitter_value += 1;
@@ -49,15 +54,30 @@ public class SightManager : MonoBehaviour
         //Debug.Log("tim" + timer);
         if (timer >= nextActionTime) {
             float jitter = Random.Range(0, jitter_value);
-           nextActionTime = nextActionTime + period + jitter;
-           Debug.Log("j" + jitter, this);
-           if(blind.activeSelf){
+            nextActionTime = nextActionTime + period + jitter;
+            Debug.Log("j" + jitter, this);
+
+            if (blind.activeSelf)
+            {
                 blind.SetActive(false);
-           }
-           else{
+            }
+            else
+            {
+                // Take screenshot and then activate that image
+                TakeScreenshot();
+                ScreenshotOverlay.gameObject.SetActive(true);
                 blind.SetActive(true);
-           }
+            }
         }
 
+    }
+
+    void TakeScreenshot()
+    {
+        Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        screenshot.Apply();
+        ScreenshotOverlay.texture = screenshot;
+        return;
     }
 }
