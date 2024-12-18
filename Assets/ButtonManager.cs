@@ -1,18 +1,22 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+
 public class ButtonManager : MonoBehaviour
 {
-    static int schedule_chosen;
+    static int taskset;
     static int algorithm;
     static float jitter_value;
     //public Slider slider;
     //Scenemanager scenemanager;
-    public Values vals;
+    AsyncOperation sceneAsync;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        schedule_chosen = 0; //no mode chosen
+        taskset = 0; //no mode chosen
         algorithm = -1;
         jitter_value = 0;
     }
@@ -23,12 +27,35 @@ public class ButtonManager : MonoBehaviour
 
     }
 
-    public void ChangeScene()
+    public IEnumerator ChangeScene()
     {
-        //Values vals = GameObject.Find("Values");
-        vals.init(jitter_value, schedule_chosen, algorithm);
+        // On play/start, transfer Values GameObject to the Level scene
+        GameObject vals = GameObject.Find("Values");
+        vals.GetComponent<Values>().init(jitter_value, taskset, algorithm);
         DontDestroyOnLoad(vals);
-        SceneManager.LoadScene("Level");
+
+        // Load Level behind the scenes
+        AsyncOperation scene = SceneManager.LoadSceneAsync("Level", LoadSceneMode.Additive);
+        scene.allowSceneActivation = false;
+        sceneAsync = scene;
+
+        // Wait until scene is loaded
+        while (scene.progress < 0.9f)
+        {
+            Debug.Log("Loading Level. Progress: " + scene.progress);
+            yield return null;
+        }
+
+        // Set Level Scene to be active
+        sceneAsync.allowSceneActivation = true;
+        Scene level = SceneManager.GetSceneByName("Level");
+        if (level.IsValid())
+        {
+            Debug.Log("Level scene is valid.");
+            SceneManager.MoveGameObjectToScene(vals, level);
+            SceneManager.SetActiveScene(level);
+        }
+        Debug.Log("Level scene loaded and Values transferred");
     }
 
     public void Test(){
@@ -36,56 +63,30 @@ public class ButtonManager : MonoBehaviour
     }
 
     public void SelectEDF(){ //1
-        Debug.Log(schedule_chosen);
+        Debug.Log(algorithm);
         GameObject EDFbutton = GameObject.Find("EDF");
         EDFbutton.GetComponent<Image>().color = new Color(255,0,255);
         //if another already chosen - switch it off
-        if (schedule_chosen == 2){
+        if (algorithm == 1){
             GameObject RMbutton = GameObject.Find("RM");
             RMbutton.GetComponent<Image>().color = new Color(255,255,255);
-        }
-        if (schedule_chosen == 3){
-            GameObject DMbutton = GameObject.Find("DM");
-            DMbutton.GetComponent<Image>().color = new Color(255,255,255);
         }
         algorithm = 0;
         
     }
 
     public void SelectRM(){ //2
-        Debug.Log(schedule_chosen);
+        Debug.Log(algorithm);
 
         GameObject RMbutton = GameObject.Find("RM");
         RMbutton.GetComponent<Image>().color = new Color(255,0,255);
         
         //if another already chosen - switch it off
-        if (schedule_chosen == 1){
+        if (algorithm == 0){
             GameObject EDFbutton = GameObject.Find("EDF");
             EDFbutton.GetComponent<Image>().color = new Color(255,255,255);
-        }
-        if (schedule_chosen == 3){
-            GameObject DMbutton = GameObject.Find("DM");
-            DMbutton.GetComponent<Image>().color = new Color(255,255,255);
         }
         algorithm = 1;
-    }
-
-    public void SelectDM(){ //3
-        Debug.Log(schedule_chosen);
-
-        GameObject DMbutton = GameObject.Find("DM");
-        DMbutton.GetComponent<Image>().color = new Color(255,0,255);
-        if (schedule_chosen == 1){
-            GameObject EDFbutton = GameObject.Find("EDF");
-            EDFbutton.GetComponent<Image>().color = new Color(255,255,255);
-        }
-        if (schedule_chosen == 2){
-            GameObject RMbutton = GameObject.Find("RM");
-            RMbutton.GetComponent<Image>().color = new Color(255,255,255);
-        }
-        schedule_chosen = 3;
-        
-
     }
 
     //called every time slider is interacted with
