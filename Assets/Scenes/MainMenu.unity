@@ -148,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7be5a80e6748c84ca2583c6ed0f887d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vals: {fileID: 490401892}
 --- !u!4 &12913199
 Transform:
   m_ObjectHideFlags: 0
@@ -703,13 +702,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 490401891}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 546e7013e3791754e8c8496498ba31f3, type: 3}
+  m_Script: {fileID: 11500000, guid: 18b4c86bdd59d8b4ea930bf095c3651f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JitterBound: 250
-  SimulationTime: 0
-  JitterDelay: 0
-  SimulationDelay: 500
+  blind: {fileID: 0}
+  vals: {fileID: 490401891}
 --- !u!1 &539282535
 GameObject:
   m_ObjectHideFlags: 0
