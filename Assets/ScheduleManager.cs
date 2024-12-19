@@ -2,9 +2,18 @@ using UnityEngine;
 using System.Timers;
 using System;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
+using UnityEngine.Networking;
+using System.Collections;
+using TMPro;
 public class ScheduleManager : MonoBehaviour
 {
+    public Slider slider;
+    RawImage ScreenshotOverlay;
+    public GameObject blind;
+    public int scoreVal;
+    public TMP_Text score;
     public struct Task
     {
         public Task(int id, int c, int t, int r)
@@ -25,8 +34,8 @@ public class ScheduleManager : MonoBehaviour
     private System.Random Generator;
     public int SimulationTime;
     public int JitterDelay;
-    public int SimulationDelay = 500;
-
+    public int SimulationDelay = 5000;
+    public int schedule_chosen;
 
     public static Task[] TaskSet1;
     public static Task[] TaskSet2;
@@ -55,26 +64,56 @@ public class ScheduleManager : MonoBehaviour
     void Start()
     {
         // Init variables
+        GameObject valObj = GameObject.Find("Values");
+        Values vals = valObj.GetComponent<Values>();
+       
+        schedule_chosen = vals.getSchedule();
+        Sched = GetSchedule(1,schedule_chosen);
+        //blind.SetActive(false);
+        JitterDelay = vals.getJitter();
         SimulationTime = 0;
         Generator = new System.Random();
-        Sched = Schedule1_EDF;
+
+
     }
 
     // Update is called once per frame
+    WaitForEndOfFrame frameEnd = new WaitForEndOfFrame();
+
     async void Update()
     {
+        JitterDelay = (int)slider.value;
+
+        if(SimulationTime >= Sched.Length){
+            SimulationTime = 0;
+            //ScreenshotOverlay.gameObject.SetActive(true);
+
+        }
+    
         if (Sched[SimulationTime] == 0)
         {
             // Sight task is running
+            //Debug.Log(0);
+            //TakeScreenshot();
+            blind.SetActive(false);
+            //TakeScreenshot();
+            ScreenshotOverlay.gameObject.SetActive(false);
         }
         else
         {
+
+            //ScreenshotOverlay.gameObject.SetActive(true);
+
+            blind.SetActive(true);
+            //Debug.Log(1);
+            //blind.GetComponent<RawImage>().texture = ScreenshotOverlay.texture;
             // Other task is running
 
             // If the sight task runs next, add jitter
             if (SimulationTime + 1 < Sched.Length && Sched[SimulationTime + 1] == 0)
             {
                 JitterDelay = Generator.Next(JitterBound);
+                Debug.Log(JitterDelay);
                 await System.Threading.Tasks.Task.Delay(JitterDelay);
             }
         }
@@ -121,4 +160,11 @@ public class ScheduleManager : MonoBehaviour
         else if (schednum == 2 && algo == 1) return Schedule2_RMS;
         else return null;
     }    
+
+
+
+   public void incScore(){
+        scoreVal++;
+        score.text = scoreVal.ToString();
+   }
 }
