@@ -6,6 +6,12 @@ public class RoadSpawner : MonoBehaviour
 {
     public List<GameObject> roads;
     float offset = 36;
+
+    public GameObject leftWall;
+    public GameObject rightWall;
+    public GameObject backWall;
+    public GameObject car;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,5 +27,9 @@ public class RoadSpawner : MonoBehaviour
         float newZ = roads[roads.Count-1].transform.position.z + offset;
         roadToMove.transform.position = new Vector3(0,0,newZ);
         roads.Add(roadToMove);
+        rightWall.transform.position += new Vector3(0, 0, 36);
+        leftWall.transform.position += new Vector3(0, 0, 36);
+        float carX = car.transform.position.x;
+        backWall.transform.position = car.transform.position - new Vector3(carX, 0, 10);
     }
 }
